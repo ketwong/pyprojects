@@ -1,0 +1,3196 @@
+<body>
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div style="display:none;" class="loading_overlay">
+        <div class="loading_bg"></div>
+        <p>Please wait...</p>
+        <img src="https://bannatyne-services.brightlime.com/media/image/ajax-loader.gif" alt="Loading...">
+    </div>
+
+    <div style="display:none;" id="addons_dialog" class="addons_dialog">
+        <h2>Booking Add-ons</h2>
+        <p>
+            These add-ons are available for you to book along with this session
+        </p>
+        <table class="addons_dialog_table">
+        </table>
+    </div>
+
+            <header id="header-outer" class="clearfix">
+                            <div class="container"><div class="row"><div class="col-md-12"><div id="header-inner" class="header-inner-mp">
+            
+                <a href="https://bannatyne-services.brightlime.com/">
+                    <img class="logo" src="https://bannatyne-services.brightlime.com/media/image/theme/bannatyne/logo.png">
+                </a>
+
+                                    <h1>Member Portal</h1>
+
+                                            <div class="basket-tab">
+                            <a href="https://bannatyne-services.brightlime.com/basket/">
+                                <img src="https://bannatyne-services.brightlime.com/media/image/icons/basket.png">
+                                Basket                                (<span class="basket_count">0</span>)
+                            </a>
+                        </div>
+                                    
+                            </div></div></div></div>
+                    </header>
+    
+            <div id="main-content-mp" class="container">
+        <div class="breadcrumbs"><span class="breadlink active">
+				<a href="https://bannatyne-services.brightlime.com/memberservice/">Home</a>
+		</span><span class="separator">
+			<img src="https://bannatyne-services.brightlime.com/media/image/breadcrumb.png" alt="">
+		</span><span class="breadlink current">Make a Booking</span></div>    <div class="row">
+            <div class="col-md-2">
+            <script type="text/javascript" src="https://livegood.co.uk/js/lgd-embed.js"></script>
+
+
+<ul class="navigation">
+    <li class="nav_expander"><a href="#"><span class="icon-menu" aria-hidden="true"></span> Menu</a></li>
+    <li><a href="https://bannatyne-services.brightlime.com/memberservice/">Home</a></li>
+    <li>
+        <div id="Livegood-Container" data-domain="https://livegood.co.uk/api/sitevalidator?site_id=f7153666-6901-4144-8e42-4a9e8303818f&amp;signature=950315ca1e69fa492a9ddc6e60800e4f6505be407ae86b9de7df3f513d12b8ba"><a href="https://bannatyne.livegood.co.uk?signature=6fe4d83650e2bfe529863e988c1c838f71c0a1ff3310d0fcf2c3445348608544" class="livegood-link-button" style="color: #FFFFFF;
+                    background-color: #bed600;
+                    padding:1rem;
+                    text-decoration:none;
+            ">Member Benefits</a></div>
+    </li>
+    <li><a href="https://bannatyne-services.brightlime.com/myaccount/view/">Profile</a></li>
+    <li><a href="https://bannatyne-services.brightlime.com/bookings/activities/"><span>Class Booking</span></a></li>
+    <li class="fitness-team"><a href="https://bannatyne-services.brightlime.com/bookings/activities/find/pt/"><span>Fitness Team Booking</span></a></li>
+            <li>
+            <a href="https://bannatyne-services.brightlime.com/basket/">
+                Basket                 (<span class="basket_count">0</span>)            </a>
+        </li>
+        <li><a href="https://bannatyne-services.brightlime.com/bookings/booked/">Bookings</a></li>
+
+    <li>
+        <a href="https://bannatyne-services.brightlime.com/financial/">
+            Financial                    </a>
+    </li>
+    <li>
+        <a href="https://bannatyne-services.brightlime.com/manage/">
+            Manage Account        </a>
+    </li>
+                <li><a href="https://bannatyne-services.brightlime.com/login/logout/">Log Out</a></li>
+</ul>
+        </div>
+    
+    
+        
+        
+
+<!--suppress SqlResolve, SyntaxError, JSUndeclaredVariable, JSJQueryEfficiency, JSCheckFunctionSignatures, JSValidateTypes, JSUnnecessarySemicolon, JSLastCommaInObjectLiteral, JSUnusedAssignment, JSUnusedLocalSymbols, UnnecessaryLocalVariableJS, EqualityComparisonWithCoercionJS -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        var bookingProcess = 1;
+
+        $(".accordion").accordion({
+            heightStyle: "content",
+            active: false,
+            collapsible: true,
+            animate: false,
+        });
+
+        $('.accordion h3').click(function () {
+            var container = $(this).next('div');
+            var loaded = container.data('loaded');
+
+            if (loaded == 0) {
+                var groupby = container.data('group-by');
+                var groupkey = container.data('group-key');
+                var data = groupby + '=' + parseInt(groupkey);
+
+                $.ajax({
+                    url: "https://bannatyne-services.brightlime.com/media/ajax/Login/IsLoggedIn/json/true/",
+                    dataType: "json"
+
+                }).done(function (result) {
+
+                    if (result) {
+                        $.ajax({
+                            url: "https://bannatyne-services.brightlime.com/media/ajax/Bookings/GetSessions/filter/all/groupby/date/find/default/",
+                            type: "POST",
+                            data: data,
+                            dataType: "html"
+
+                        }).done(function (result) {
+                            container.data('loaded', 1);
+                            container.html(result);
+                            $.scrollTo(container.prev(), 400);
+                            setupPromotion();
+                            $('input.memberselect').trigger('change');
+                            selectSelfAndTriggerChange();
+                        }).fail(function () {
+                            location.reload();
+                        });
+
+                    } else {
+                        location.reload();
+                    }
+                });
+
+            } else {
+                $.scrollTo(container.prev(), 400);
+            }
+        });
+
+        $('.accordion').on('click', '.addtobasket', function () {
+            var sessionRow = $(this).closest('tr');
+            var attendeeIdx = sessionRow.data('attendeeidx');
+            var instanceid = sessionRow.data('instanceid');
+            var numSpaces = sessionRow.children('td').children('select.num-spaces').val();
+
+            if (bookingProcess == 2) {
+                window.location.href = 'https://bannatyne-services.brightlime.com/bookings/multibook/id/' + instanceid + '/spaces/' + numSpaces;
+                return false;
+            }
+
+            if (attendeeIdx == '') {
+                return false;
+            }
+
+            addToBasket($(this));
+        });
+
+        $("#datefrom").datepicker({
+            altField: '#datefromalt',
+            altFormat: "D, d M, yy",
+            dateFormat: 'yy-mm-dd',
+            showOn: "button",
+            buttonImage: "https://bannatyne-services.brightlime.com/media/image/icons/calendar.png",
+            buttonImageOnly: true,
+            buttonText: 'Select from date',
+            minDate: 0,
+            maxDate: "+1Y",
+            onClose: function (selectedDate) {
+                $("#dateto").datepicker("option", "minDate", selectedDate);
+                $('#datefromlabel span').html($('#datefromalt').val());
+            }
+        });
+
+        $("#dateto").datepicker({
+            altField: '#datetoalt',
+            altFormat: "D, d M, yy",
+            dateFormat: 'yy-mm-dd',
+            showOn: "button",
+            buttonImage: "https://bannatyne-services.brightlime.com/media/image/icons/calendar.png",
+            buttonImageOnly: true,
+            buttonText: "Select to date",
+            minDate: 0,
+            maxDate: "+1Y",
+            onClose: function (selectedDate) {
+                $("#datefrom").datepicker("option", "maxDate", selectedDate);
+                $('#datetolabel span').html($('#datetoalt').val());
+            }
+        });
+
+        $('#datefromlabel').click(function () {
+            $('#datefrom').datepicker('show');
+        });
+
+        $('#datetolabel').click(function () {
+            $('#dateto').datepicker('show');
+        });
+
+                $('#date_filters .datepicker').change(function () {
+            updateFilterUrl();
+        });
+
+        $('.filter_option').change(function () {
+            updateFilterUrl();
+        });
+
+        $('.group_option').change(function () {
+            updateFilterUrl();
+        });
+
+        $('.home_club').prependTo('.clubs_list');
+
+        updateFilterUrl();
+        stopLoading();
+    });
+
+    function setupPromotion() {
+        $('.memberselect').on('change', function() {
+            var sessionRow = $(this).closest('tr');
+            var clickedButton = sessionRow.children('td').children('input.addtobasket');
+            var newAttendeeIdx = $(this).val();
+            var promotion = 0;
+            var mustWait = parseInt(sessionRow.children('.spaces').html()) <= 0;
+            var nonWaitingSpaces = sessionRow.data('nonwaitingspaces');
+
+            if ($(this).is('select')) {
+                promotion = $(this).find(':selected').data('promotion');
+            } else {
+                promotion = $(this).data('promotion');
+            }
+
+            $(this).closest('tr').data('attendeeidx', newAttendeeIdx).attr('data-attendeeidx', newAttendeeIdx);
+            $(this).closest('tr').data('promotion', promotion).attr('data-promotion', promotion);
+
+            if (promotion == 1 && (clickedButton.val() === 'Book' || clickedButton.val() === 'Waiting List')) {
+                clickedButton.val('Promote');
+            }
+
+            if (promotion == 0 && clickedButton.val() === 'Promote') {
+                clickedButton.val(mustWait ? 'Waiting List' : 'Book');
+            }
+        });
+    }
+
+    // ---- This function when called selects the current logged in member is enabled in sessions member select drop down
+    function selectSelfAndTriggerChange() {
+        $('select.memberselect').val(0).find('option:not([disabled])').each(function () {
+            var member = "2664298";
+            if ($(this).val() === member) {
+                $(this).parent().val(member);
+            }
+        });
+        $('select.memberselect').trigger('change');
+    }
+
+    // ---- This function when checks if the sessionMemberSelect exists and if it does and only has select option it disables the session as no member is bookable
+    function disableSessionIfNoMemberBookable(clickedButton, sessionRow, sessionMemberSelect) {
+        if (sessionMemberSelect.length == 1) {
+            var optionLength = sessionMemberSelect.find('option:not([disabled])').length;
+            if (optionLength == 1) {
+                clickedButton.val('In Basket').removeClass('addtobasket').unbind('click');
+                sessionRow.addClass('disabled_session');
+                sessionMemberSelect.parent().html('-');
+            }
+        }
+    }
+
+    function updatePromotables(clickedButton, sessionRow, sessionMemberSelect) {
+        if (sessionMemberSelect.length == 1) {
+            sessionData = {};
+            sessionData.nonWaitingSpaces = sessionRow.data('nonwaitingspaces');
+            sessionData.promotion = sessionRow.data('promotion');
+            if (sessionData.nonWaitingSpaces - 1 <= 0) {
+                sessionMemberSelect.find('option[data-promotion="1"]').attr('disabled', 'disabled');
+            }
+        }
+    }
+
+    function addToBasket(clickedButton) {
+        startLoading();
+
+        var sessionRow = clickedButton.closest('tr');
+        var sessionMemberSelect = sessionRow.children('td').children('select.memberselect');
+        var sessionMemberInput = sessionRow.children('td').children('input.memberselect');
+
+        var waitingListLimit = 100;
+
+        // Values that need to be posted via ajax.
+        var sessionData = {};
+        sessionData.instanceId = sessionRow.data('instanceid');
+        sessionData.attendeeIdx = sessionRow.data('attendeeidx');
+
+        if (sessionData.instanceId == 0 || sessionData.attendeeIdx == 0) {
+            stopLoading();
+            return false;
+        }
+
+        // Other values used to update the view.
+        sessionData.currentSpaces = parseInt(sessionRow.children('.spaces').html());
+        sessionData.start = sessionRow.data('start');
+        sessionData.end = sessionRow.data('end');
+        sessionData.parentInstanceId = sessionRow.data('parentinstanceid');
+        sessionData.waitingListEnabled = sessionRow.data('waitinglistenabled');
+        sessionData.numberOnWaitingList = sessionRow.data('numberonwaitinglist');
+        sessionData.promotion = sessionRow.data('promotion');
+        sessionData.price = sessionRow.data('price');
+        sessionData.nonWaitingSpaces = sessionRow.data('nonwaitingspaces');
+
+        var data = {instanceid: sessionData.instanceId, memberid: sessionData.attendeeIdx, promotion: sessionData.promotion};
+
+        // If there are no normal spaces, but waiting list is enabled and has spaces.
+        if (sessionData.currentSpaces == 0 && sessionData.waitingListEnabled != 0 && sessionData.numberOnWaitingList < waitingListLimit) {
+            data.waitinglist = 1;
+
+            $.ajax({
+                url: "https://bannatyne-services.brightlime.com/media/ajax/Basket/AddBooking/",
+                type: "POST",
+                data: data,
+                dataType: "json"
+
+            }).done(function (result) {
+
+                if (result) {
+                    updateBasketCount();
+                    sessionRow.data('nonwaitingspaces', sessionData.nonWaitingSpaces - 1).attr('data-nonwaitingspaces', sessionData.nonWaitingSpaces - 1);
+                    updatePromotables(clickedButton, sessionRow, sessionMemberSelect);
+
+                    // If no waiting list spaces will be left after this booking is made, set as full.
+                    if (sessionData.numberOnWaitingList + 1 >= waitingListLimit) {
+                        clickedButton.val('Full').removeClass('addtobasket').unbind('click');
+                        sessionRow.addClass('disabled_session');
+                        sessionMemberSelect.parent().html('-');
+                    }
+
+                                            // Multiple member booking mode. Block the selected member from booking the same session again.
+                        if (sessionMemberSelect.length == 1) {
+                            sessionMemberSelect.children('.option-' + sessionData.attendeeIdx).attr('disabled', 'disabled');
+                            selectSelfAndTriggerChange();
+
+                        // Single member booking mode. Disable book button.
+                        } else {
+                            clickedButton.val('In Basket').removeClass('addtobasket').unbind('click');
+                            sessionRow.addClass('disabled_session');
+                            sessionMemberInput.val(0);
+                        }
+
+                                                    checkOverlaps(sessionData);
+                                            
+                    disableSessionIfNoMemberBookable(clickedButton, sessionRow, sessionMemberSelect);
+
+                    
+                } else if (sessionRow.data('start') * 1000 < (new Date().getTime())) {
+                    // If start time has elapsed, disable the button to prevent further attempts to book.
+                    clickedButton.val('Closed').removeClass('addtobasket').unbind('click');
+                    sessionRow.addClass('disabled_session');
+                }
+
+            }).always(function () {
+                getGrowl();
+                stopLoading();
+            });
+
+        // If spaces are available.
+        } else if (sessionData.currentSpaces > 0) {
+            data.waitinglist = 0;
+
+            $.ajax({
+                url: "https://bannatyne-services.brightlime.com/media/ajax/Basket/AddBooking/",
+                type: "POST",
+                data: data,
+                dataType: "json"
+
+            }).done(function (result) {
+
+                if (result) {
+                    updateBasketCount();
+                    sessionRow.children('.spaces').html(sessionData.currentSpaces - 1);
+                    sessionRow.data('nonwaitingspaces', sessionData.nonWaitingSpaces - 1).attr('data-nonwaitingspaces', sessionData.nonWaitingSpaces - 1);
+                    updatePromotables(clickedButton, sessionRow, sessionMemberSelect);
+
+                    // If no spaces will be left after this booking is made, set as full or show waiting list button.
+                    if (sessionData.currentSpaces - 1 <= 0) {
+
+                        if (sessionData.waitingListEnabled == 0) {
+                            clickedButton.val('Full').removeClass('addtobasket').unbind('click');
+                            sessionRow.addClass('disabled_session');
+                            sessionMemberSelect.parent().html('-');
+
+                        } else {
+                            clickedButton.val('Waiting List');
+                        }
+                    }
+
+                                            // Multiple member booking mode. Block the selected member from booking the same session again.
+                        if (sessionMemberSelect.length == 1) {
+                            sessionMemberSelect.children('.option-' + sessionData.attendeeIdx).attr('disabled', 'disabled');
+                            selectSelfAndTriggerChange();
+
+                            if (sessionData.currentSpaces - 1 <= 0 && sessionData.waitingListEnabled == 0) {
+                                clickedButton.val('In Basket');
+                            }
+
+                        // Single member booking mode. Disable book button.
+                        } else {
+                            clickedButton.val('In Basket').removeClass('addtobasket').unbind('click');
+                            sessionRow.addClass('disabled_session');
+                            sessionMemberInput.val(0);
+                        }
+
+                                                    checkOverlaps(sessionData);
+                                            
+                    disableSessionIfNoMemberBookable(clickedButton, sessionRow, sessionMemberSelect);
+
+                                            stopLoading();
+
+                                            
+                } else if (sessionRow.data('start') * 1000 < (new Date().getTime())) {
+                    // If start time has elapsed, disable the button to prevent further attempts to book.
+                    clickedButton.val('Closed').removeClass('addtobasket').unbind('click');
+                    sessionRow.addClass('disabled_session');
+                }
+
+            }).always(function () {
+                getGrowl();
+                stopLoading();
+            });
+
+        // No spaces available.
+        } else {
+            stopLoading();
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkOverlaps(sessionData) {
+        var waitingListLimit = 100;
+
+        // Go through all other sessions in table and compare against sessionData (the session added to basket), updating any overlapping sessions as needed.
+        $('table.sessions_table tr').each(function () {
+            var sessionToCheck = {};
+            var sess_memberSelect = $(this).children('td').children('select.memberselect');
+            var sess_memberInput = $(this).children('td').children('input.memberselect');
+            sessionToCheck.instanceId = $(this).data('instanceid');
+
+            if (sessionToCheck.instanceId != sessionData.instanceId) {
+                sessionToCheck.start = $(this).data('start');
+                sessionToCheck.end = $(this).data('end');
+                sessionToCheck.parentInstanceId = $(this).data('parentinstanceid');
+                sessionToCheck.isOverlap = sessionToCheck.start < sessionData.end && sessionToCheck.end > sessionData.start;
+
+                if (sessionToCheck.isOverlap) {
+
+                    // Multiple member booking mode. Disable same member from booking this overlapping session.
+                    if (sess_memberSelect.length == 1) {
+                        sess_memberSelect.children('.option-' + sessionData.attendeeIdx).attr('disabled', 'disabled');
+
+                        // Single member booking mode. Disable same member from booking this overlapping session.
+                    } else {
+                        var sess_button = $('#btnSession' + sessionToCheck.instanceId);
+
+                        if (sessionToCheck.start < sessionData.end && sessionToCheck.end > sessionData.start) {
+                            sess_button.val('Overlap basket').removeClass('addtobasket').unbind('click');
+                            $(this).addClass('disabled_session');
+                        }
+                    }
+
+                    // If session shares same parent instance, update spaces/waiting list count.
+                    if (sessionData.parentInstanceId > 0 && sessionToCheck.parentInstanceId == sessionData.parentInstanceId) {
+                        sessionToCheck.currentSpaces = parseInt($(this).children('.spaces').html());
+                        sessionToCheck.waitingListEnabled = $(this).data('waitinglistenabled');
+                        sessionToCheck.numberOnWaitingList = $(this).data('numberonwaitinglist');
+                        sess_addToBasketButton = $(this).children('td').children('input.addtobasket');
+
+                        // If spaces, reduce by 1.
+                        if (sessionToCheck.currentSpaces > 0) {
+                            $(this).children('td.spaces').html(sessionToCheck.currentSpaces - 1);
+
+                            // If waiting list enabled, increase wait count by 1.
+                        } else if (sessionToCheck.waitingListEnabled != 0) {
+                            $(this).data('numberonwaitinglist', $(this).data('numberonwaitinglist') + 1);
+                            sessionToCheck.numberOnWaitingList = $(this).data('numberonwaitinglist');
+
+                            // If new wait count meets maximum, disable session from being booked (full).
+                            if ($(this).data('numberonwaitinglist') >= waitingListLimit) {
+                                sess_addToBasketButton.val('Full').removeClass('addtobasket').unbind('click');
+                                $(this).addClass('disabled_session');
+                                sess_memberSelect.parent().html('-');
+                            }
+                        }
+
+                        // Update button/member select if spaces becomes equal to zero.
+                        if (sessionToCheck.currentSpaces - 1 == 0) {
+
+                            if (sessionToCheck.waitingListEnabled == 0) {
+                                sess_addToBasketButton.val('Overlap basket').removeClass('addtobasket').unbind('click');
+                                $(this).addClass('disabled_session');
+                                sess_memberSelect.parent().html('-');
+                            } else {
+                                sess_addToBasketButton.val('Waiting List');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function checkDates(dateinput) {
+        if ($('#datefrom').val() == '' || $('#dateto').val() == '') {
+            return true;
+        }
+
+        var datefromval = $('#datefrom').val();
+        var datetoval = $('#dateto').val();
+        var datefrom = new Date(datefromval);
+        var dateto = new Date(datetoval);
+
+        return datefrom.getTime() <= dateto.getTime();
+    }
+
+    function updateFilterUrl() {
+        var filter_segments = [];
+        var groupby = '';
+        var find = '';
+
+        $(".group_option").each(function () {
+
+            if (this.checked) {
+                groupby = $(this).attr('id').replace('-', '/');
+                ;
+            }
+        });
+
+        
+        $(".filter_option").each(function () {
+
+            if (this.checked) {
+                filter_segments[filter_segments.length] = $(this).attr('id');
+            }
+        });
+
+        $("#date_filters .datepicker").each(function () {
+
+            if ($(this).val() != '') {
+                filter_segments[filter_segments.length] = $(this).attr('id') + '-' + $(this).val().replace('-', '_').replace('-', '_');
+            }
+        });
+
+        var defaulturl = $('#update_filters_button').data('defaulturl');
+        var updated_url = defaulturl;
+
+        if (filter_segments.length > 0) {
+            updated_url = updated_url + '/filter/' + filter_segments.join('-');
+        }
+
+        if (groupby != '') {
+            updated_url = updated_url + '/' + groupby + '/' + find;
+        }
+
+        $('#update_filters_button').attr('href', updated_url);
+    }
+</script>
+
+
+<div class="col-md-3">
+    <a href="#" class="button filters_expander">
+        Filters    </a>
+    <div class="filters_wrapper filters_closed">
+        <h2>Filters</h2>
+        <div class="filter_box_header">
+            Group By        </div>
+        <div class="filter_box">
+            <ul>
+                                    <li>
+                        <label class="radio" for="groupby-activity">
+                            <input id="groupby-activity" name="groupby" class="group_option" type="radio" value="activity">
+                            <span class="checkmark"></span>
+                            Activity                        </label>
+                    </li>
+                                    <li>
+                        <label class="radio" for="groupby-date">
+                            <input id="groupby-date" name="groupby" class="group_option" type="radio" checked="checked" value="date">
+                            <span class="checkmark"></span>
+                            Date                        </label>
+                    </li>
+                            </ul>
+        </div>
+        <div class="filter_box_header">
+            Date        </div>
+        <div class="filter_box">
+
+                        <ul id="date_filters">
+                <li>
+                    <label id="datefromlabel">
+                        <input id="datefrom" class="datepicker hasDatepicker" value="" type="hidden"><img class="ui-datepicker-trigger" src="https://bannatyne-services.brightlime.com/media/image/icons/calendar.png" alt="Select from date" title="Select from date">
+                        <input id="datefromalt" value="" type="hidden">
+                        From: <span></span>
+                    </label>
+                </li>
+                <li>
+                    <label id="datetolabel">
+                        <input id="dateto" class="datepicker hasDatepicker" value="" type="hidden"><img class="ui-datepicker-trigger" src="https://bannatyne-services.brightlime.com/media/image/icons/calendar.png" alt="Select to date" title="Select to date">
+                        <input id="datetoalt" value="" type="hidden">
+                        To: <span></span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+                    <div class="filter_box_header">
+                Type                <span class="filter_icon">
+                    <img src="https://bannatyne-services.brightlime.com/media/image/icons/filter.png" alt="Filter">
+                    0                </span>
+            </div>
+            <div class="filter_box">
+                <ul>
+                                                                                                    <li>
+                                <label class="checkbox" for="type-31">
+                                    <input id="type-31" class="filter_option" type="checkbox" value="31">
+                                    <span class="checkmark"></span>
+                                    Cardio/Sculpt                                    <!--
+                                        Removed due to not needing counts.
+                                        Left in so that if they are needed, its easy to put back in.
+                                        <span class="filter_option_count">(1)</span>
+                                    -->
+                                </label>
+                            </li>
+
+                                                                                <li>
+                                <label class="checkbox" for="type-1">
+                                    <input id="type-1" class="filter_option" type="checkbox" value="1">
+                                    <span class="checkmark"></span>
+                                    Cardiovascular                                    <!--
+                                        Removed due to not needing counts.
+                                        Left in so that if they are needed, its easy to put back in.
+                                        <span class="filter_option_count">(76)</span>
+                                    -->
+                                </label>
+                            </li>
+
+                                                                                <li>
+                                <label class="checkbox" for="type-80">
+                                    <input id="type-80" class="filter_option" type="checkbox" value="80" data-com.bitwarden.browser.user-edited="yes">
+                                    <span class="checkmark"></span>
+                                    Courts                                    <!--
+                                        Removed due to not needing counts.
+                                        Left in so that if they are needed, its easy to put back in.
+                                        <span class="filter_option_count">(484)</span>
+                                    -->
+                                </label>
+                            </li>
+
+                                                                                <li>
+                                <label class="checkbox" for="type-2">
+                                    <input id="type-2" class="filter_option" type="checkbox" value="2">
+                                    <span class="checkmark"></span>
+                                    Mind and Body                                    <!--
+                                        Removed due to not needing counts.
+                                        Left in so that if they are needed, its easy to put back in.
+                                        <span class="filter_option_count">(25)</span>
+                                    -->
+                                </label>
+                            </li>
+
+                                                                                <li>
+                                <label class="checkbox" for="type-3">
+                                    <input id="type-3" class="filter_option" type="checkbox" value="3">
+                                    <span class="checkmark"></span>
+                                    Muscle                                    <!--
+                                        Removed due to not needing counts.
+                                        Left in so that if they are needed, its easy to put back in.
+                                        <span class="filter_option_count">(12)</span>
+                                    -->
+                                </label>
+                            </li>
+
+                                                            </ul>
+            </div>
+        
+        <div class="filter_box_header">
+            Club            <span class="filter_icon">
+                <img src="https://bannatyne-services.brightlime.com/media/image/icons/filter.png" alt="Filter">
+                0            </span>
+        </div>
+        <div class="filter_box">
+            <ul class="clubs_list"><li class="home_club">
+                            <label class="checkbox" for="club-18">
+                                <input id="club-18" class="filter_option" type="checkbox" checked="checked" value="18">
+                                <span class="checkmark"></span>
+                                                                    <span class="icon-home"></span>
+                                                                Chafford Hundred                                                            </label>
+                        </li>
+                
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-5">
+                                <input id="club-5" class="filter_option" type="checkbox" value="5">
+                                <span class="checkmark"></span>
+                                                                Aberdeen                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-6">
+                                <input id="club-6" class="filter_option" type="checkbox" value="6">
+                                <span class="checkmark"></span>
+                                                                Ashford                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-7">
+                                <input id="club-7" class="filter_option" type="checkbox" value="7">
+                                <span class="checkmark"></span>
+                                                                Ayr                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-8">
+                                <input id="club-8" class="filter_option" type="checkbox" value="8">
+                                <span class="checkmark"></span>
+                                                                Barnsley                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-74">
+                                <input id="club-74" class="filter_option" type="checkbox" value="74">
+                                <span class="checkmark"></span>
+                                                                Belfast                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-9">
+                                <input id="club-9" class="filter_option" type="checkbox" value="9">
+                                <span class="checkmark"></span>
+                                                                Birmingham - Brindleyplace                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-11">
+                                <input id="club-11" class="filter_option" type="checkbox" value="11">
+                                <span class="checkmark"></span>
+                                                                Blackpool                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-68">
+                                <input id="club-68" class="filter_option" type="checkbox" value="68">
+                                <span class="checkmark"></span>
+                                                                Braintree                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-15">
+                                <input id="club-15" class="filter_option" type="checkbox" value="15">
+                                <span class="checkmark"></span>
+                                                                Burton-on-Trent                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-67">
+                                <input id="club-67" class="filter_option" type="checkbox" value="67">
+                                <span class="checkmark"></span>
+                                                                Bury St Edmunds                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-16">
+                                <input id="club-16" class="filter_option" type="checkbox" value="16">
+                                <span class="checkmark"></span>
+                                                                Cardiff                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-77">
+                                <input id="club-77" class="filter_option" type="checkbox" value="77">
+                                <span class="checkmark"></span>
+                                                                Cardigan Fields, Leeds                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-17">
+                                <input id="club-17" class="filter_option" type="checkbox" value="17">
+                                <span class="checkmark"></span>
+                                                                Carlisle                                                            </label>
+                        </li>
+
+                    
+                        
+                        
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-19">
+                                <input id="club-19" class="filter_option" type="checkbox" value="19">
+                                <span class="checkmark"></span>
+                                                                Chester-le-Street                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-20">
+                                <input id="club-20" class="filter_option" type="checkbox" value="20">
+                                <span class="checkmark"></span>
+                                                                Chingford                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-21">
+                                <input id="club-21" class="filter_option" type="checkbox" value="21">
+                                <span class="checkmark"></span>
+                                                                Colchester - Whitehall                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-22">
+                                <input id="club-22" class="filter_option" type="checkbox" value="22">
+                                <span class="checkmark"></span>
+                                                                Coulby Newham                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-23">
+                                <input id="club-23" class="filter_option" type="checkbox" value="23">
+                                <span class="checkmark"></span>
+                                                                Crewe                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-4">
+                                <input id="club-4" class="filter_option" type="checkbox" value="4">
+                                <span class="checkmark"></span>
+                                                                Darlington                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-24">
+                                <input id="club-24" class="filter_option" type="checkbox" value="24">
+                                <span class="checkmark"></span>
+                                                                Dumfries                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-25">
+                                <input id="club-25" class="filter_option" type="checkbox" value="25">
+                                <span class="checkmark"></span>
+                                                                Dunfermline                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-26">
+                                <input id="club-26" class="filter_option" type="checkbox" value="26">
+                                <span class="checkmark"></span>
+                                                                Durham                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-27">
+                                <input id="club-27" class="filter_option" type="checkbox" value="27">
+                                <span class="checkmark"></span>
+                                                                Eastbourne                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-28">
+                                <input id="club-28" class="filter_option" type="checkbox" value="28">
+                                <span class="checkmark"></span>
+                                                                Edinburgh City                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-29">
+                                <input id="club-29" class="filter_option" type="checkbox" value="29">
+                                <span class="checkmark"></span>
+                                                                Edinburgh Newcraighall                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-31">
+                                <input id="club-31" class="filter_option" type="checkbox" value="31">
+                                <span class="checkmark"></span>
+                                                                Falkirk                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-33">
+                                <input id="club-33" class="filter_option" type="checkbox" value="33">
+                                <span class="checkmark"></span>
+                                                                Grove Park                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-73">
+                                <input id="club-73" class="filter_option" type="checkbox" value="73">
+                                <span class="checkmark"></span>
+                                                                Humberston                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-35">
+                                <input id="club-35" class="filter_option" type="checkbox" value="35">
+                                <span class="checkmark"></span>
+                                                                Ingleby Barwick                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-36">
+                                <input id="club-36" class="filter_option" type="checkbox" value="36">
+                                <span class="checkmark"></span>
+                                                                Inverness                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-37">
+                                <input id="club-37" class="filter_option" type="checkbox" value="37">
+                                <span class="checkmark"></span>
+                                                                Leicester                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-38">
+                                <input id="club-38" class="filter_option" type="checkbox" value="38">
+                                <span class="checkmark"></span>
+                                                                Livingston                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-39">
+                                <input id="club-39" class="filter_option" type="checkbox" value="39">
+                                <span class="checkmark"></span>
+                                                                Lowestoft                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-40">
+                                <input id="club-40" class="filter_option" type="checkbox" value="40">
+                                <span class="checkmark"></span>
+                                                                Luton                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-41">
+                                <input id="club-41" class="filter_option" type="checkbox" value="41">
+                                <span class="checkmark"></span>
+                                                                Maida Vale                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-42">
+                                <input id="club-42" class="filter_option" type="checkbox" value="42">
+                                <span class="checkmark"></span>
+                                                                Manchester Quay St                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-43">
+                                <input id="club-43" class="filter_option" type="checkbox" value="43">
+                                <span class="checkmark"></span>
+                                                                Manchester Whitworth St                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-45">
+                                <input id="club-45" class="filter_option" type="checkbox" value="45">
+                                <span class="checkmark"></span>
+                                                                Mansfield                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-47">
+                                <input id="club-47" class="filter_option" type="checkbox" value="47">
+                                <span class="checkmark"></span>
+                                                                Milton Keynes                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-48">
+                                <input id="club-48" class="filter_option" type="checkbox" value="48">
+                                <span class="checkmark"></span>
+                                                                Newport                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-49">
+                                <input id="club-49" class="filter_option" type="checkbox" value="49">
+                                <span class="checkmark"></span>
+                                                                Norwich                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-71">
+                                <input id="club-71" class="filter_option" type="checkbox" value="71">
+                                <span class="checkmark"></span>
+                                                                Norwich West                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-69">
+                                <input id="club-69" class="filter_option" type="checkbox" value="69">
+                                <span class="checkmark"></span>
+                                                                Orpington                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-50">
+                                <input id="club-50" class="filter_option" type="checkbox" value="50">
+                                <span class="checkmark"></span>
+                                                                Perth                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-51">
+                                <input id="club-51" class="filter_option" type="checkbox" value="51">
+                                <span class="checkmark"></span>
+                                                                Peterborough                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-52">
+                                <input id="club-52" class="filter_option" type="checkbox" value="52">
+                                <span class="checkmark"></span>
+                                                                Rotherham                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-54">
+                                <input id="club-54" class="filter_option" type="checkbox" value="54">
+                                <span class="checkmark"></span>
+                                                                Shrewsbury                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-55">
+                                <input id="club-55" class="filter_option" type="checkbox" value="55">
+                                <span class="checkmark"></span>
+                                                                Skelmersdale                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-56">
+                                <input id="club-56" class="filter_option" type="checkbox" value="56">
+                                <span class="checkmark"></span>
+                                                                Solihull                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-57">
+                                <input id="club-57" class="filter_option" type="checkbox" value="57">
+                                <span class="checkmark"></span>
+                                                                Stepps                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-58">
+                                <input id="club-58" class="filter_option" type="checkbox" value="58">
+                                <span class="checkmark"></span>
+                                                                Sutton Coldfield                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-59">
+                                <input id="club-59" class="filter_option" type="checkbox" value="59">
+                                <span class="checkmark"></span>
+                                                                Tamworth                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-61">
+                                <input id="club-61" class="filter_option" type="checkbox" value="61">
+                                <span class="checkmark"></span>
+                                                                Wakefield                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-62">
+                                <input id="club-62" class="filter_option" type="checkbox" value="62">
+                                <span class="checkmark"></span>
+                                                                Wellingborough                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-63">
+                                <input id="club-63" class="filter_option" type="checkbox" value="63">
+                                <span class="checkmark"></span>
+                                                                Worksop                                                            </label>
+                        </li>
+
+                    
+                        
+                        <li>
+                            <label class="checkbox" for="club-3">
+                                <input id="club-3" class="filter_option" type="checkbox" value="3">
+                                <span class="checkmark"></span>
+                                                                York                                                            </label>
+                        </li>
+
+                                                </ul>
+        </div>
+        <a id="update_filters_button" class="button bmargin" href="https://bannatyne-services.brightlime.com/bookings/activities/filter/type-80-club-18/groupby/date/" data-defaulturl="https://bannatyne-services.brightlime.com/bookings/activities">Apply Filters</a>
+    </div>
+</div>
+
+<div class="col-md-7 clearfix">
+    <h2>Find An Activity</h2>
+    <p>Please note that classes are booked on a first-come-first-served basis and subject to our terms and conditions. Therefore the quantity of places remaining may not be an accurate reflection of those remaining once you book. Places are not guaranteed until the booking has been made in the basket section.</p>
+
+            <div class="accordion ui-accordion ui-widget ui-helper-reset" role="tablist">
+            <h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Fri, 16th December, 2022 <!-- (64) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221216" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div><h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-3" aria-controls="ui-id-4" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Sat, 17th December, 2022 <!-- (75) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221217" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-4" aria-labelledby="ui-id-3" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div><h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-5" aria-controls="ui-id-6" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Sun, 18th December, 2022 <!-- (69) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221218" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-6" aria-labelledby="ui-id-5" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div><h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-7" aria-controls="ui-id-8" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Mon, 19th December, 2022 <!-- (80) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221219" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-8" aria-labelledby="ui-id-7" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div><h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-9" aria-controls="ui-id-10" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Tue, 20th December, 2022 <!-- (74) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221220" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-10" aria-labelledby="ui-id-9" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div><h3 class="ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active" role="tab" id="ui-id-11" aria-controls="ui-id-12" aria-selected="true" aria-expanded="true" tabindex="0"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>Wed, 21st December, 2022 <!-- (82) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221221" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active" id="ui-id-12" aria-labelledby="ui-id-11" role="tabpanel" aria-hidden="false" style="">    <table class="sessions_table table-stackable">
+        <thead>
+            <tr>
+                                    <th>Activity</th>
+                
+                <th>Start</th>
+                <th>End</th>
+
+                                    <th>Spaces</th>
+                
+                
+                
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+        
+            
+            <tr class="disabled_session" data-start="1671602400" data-end="1671605100" data-attendeeidx="0" data-promotion="0" data-instanceid="3939517" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">06:00</td>
+                        <td data-label="End">06:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939517-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939517" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671602400" data-end="1671605100" data-attendeeidx="0" data-promotion="0" data-instanceid="3938874" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">06:00</td>
+                        <td data-label="End">06:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938874-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938874" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671602400" data-end="1671606000" data-attendeeidx="0" data-promotion="0" data-instanceid="3915186" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">06:00</td>
+                        <td data-label="End">07:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915186-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915186" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671602400" data-end="1671606000" data-attendeeidx="0" data-promotion="0" data-instanceid="3915402" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">06:00</td>
+                        <td data-label="End">07:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915402-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915402" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671604200" data-end="1671606900" data-attendeeidx="0" data-promotion="0" data-instanceid="3907738" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="23">
+
+                            <td>Chafford Hundred: Group Cycling</td>
+            
+            <td data-label="Start">06:30</td>
+                        <td data-label="End">07:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3907738-spaces">23</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3907738" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671605100" data-end="1671607800" data-attendeeidx="0" data-promotion="0" data-instanceid="3939518" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">06:45</td>
+                        <td data-label="End">07:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939518-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939518" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671605100" data-end="1671607800" data-attendeeidx="0" data-promotion="0" data-instanceid="3938875" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">06:45</td>
+                        <td data-label="End">07:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938875-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938875" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671606000" data-end="1671609600" data-attendeeidx="0" data-promotion="0" data-instanceid="3919132" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="20">
+
+                            <td>Chafford Hundred: Circuits</td>
+            
+            <td data-label="Start">07:00</td>
+                        <td data-label="End">08:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919132-spaces">20</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919132" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671606000" data-end="1671609600" data-attendeeidx="0" data-promotion="0" data-instanceid="3915187" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">07:00</td>
+                        <td data-label="End">08:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915187-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915187" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671606000" data-end="1671609600" data-attendeeidx="0" data-promotion="0" data-instanceid="3915403" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">07:00</td>
+                        <td data-label="End">08:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915403-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915403" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671607800" data-end="1671610500" data-attendeeidx="0" data-promotion="0" data-instanceid="3939519" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">07:30</td>
+                        <td data-label="End">08:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939519-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939519" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671607800" data-end="1671610500" data-attendeeidx="0" data-promotion="0" data-instanceid="3938876" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">07:30</td>
+                        <td data-label="End">08:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938876-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938876" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671609600" data-end="1671613200" data-attendeeidx="0" data-promotion="0" data-instanceid="3915188" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">08:00</td>
+                        <td data-label="End">09:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915188-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915188" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671609600" data-end="1671613200" data-attendeeidx="0" data-promotion="0" data-instanceid="3915404" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">08:00</td>
+                        <td data-label="End">09:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915404-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915404" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671610500" data-end="1671613200" data-attendeeidx="0" data-promotion="0" data-instanceid="3939520" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">08:15</td>
+                        <td data-label="End">09:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939520-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939520" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671610500" data-end="1671613200" data-attendeeidx="0" data-promotion="0" data-instanceid="3938877" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">08:15</td>
+                        <td data-label="End">09:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938877-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938877" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671610500" data-end="1671612300" data-attendeeidx="0" data-promotion="0" data-instanceid="3926981" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="20">
+
+                            <td>Chafford Hundred: Virtual Les Mills CORE</td>
+            
+            <td data-label="Start">08:15</td>
+                        <td data-label="End">08:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3926981-spaces">20</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3926981" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671613200" data-end="1671616800" data-attendeeidx="0" data-promotion="0" data-instanceid="3919140" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="18">
+
+                            <td>Chafford Hundred: Bootcamp</td>
+            
+            <td data-label="Start">09:00</td>
+                        <td data-label="End">10:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919140-spaces">18</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919140" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671613200" data-end="1671615900" data-attendeeidx="0" data-promotion="0" data-instanceid="3939521" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">09:00</td>
+                        <td data-label="End">09:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939521-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939521" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671613200" data-end="1671615900" data-attendeeidx="0" data-promotion="0" data-instanceid="3938878" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">09:00</td>
+                        <td data-label="End">09:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938878-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938878" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671613200" data-end="1671616800" data-attendeeidx="0" data-promotion="0" data-instanceid="3915189" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">09:00</td>
+                        <td data-label="End">10:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915189-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915189" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671613200" data-end="1671616800" data-attendeeidx="0" data-promotion="0" data-instanceid="3915405" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">09:00</td>
+                        <td data-label="End">10:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915405-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915405" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671615000" data-end="1671617700" data-attendeeidx="0" data-promotion="0" data-instanceid="3927002" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="25">
+
+                            <td>Chafford Hundred: The Trip - 45</td>
+            
+            <td data-label="Start">09:30</td>
+                        <td data-label="End">10:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3927002-spaces">25</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3927002" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671615900" data-end="1671618600" data-attendeeidx="0" data-promotion="0" data-instanceid="3939522" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">09:45</td>
+                        <td data-label="End">10:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939522-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939522" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671615900" data-end="1671618600" data-attendeeidx="0" data-promotion="0" data-instanceid="3938879" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">09:45</td>
+                        <td data-label="End">10:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938879-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938879" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671615900" data-end="1671617700" data-attendeeidx="0" data-promotion="0" data-instanceid="3919145" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="10">
+
+                            <td>Chafford Hundred: Vinyasa Flow Yoga</td>
+            
+            <td data-label="Start">09:45</td>
+                        <td data-label="End">10:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919145-spaces">10</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919145" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671616800" data-end="1671620400" data-attendeeidx="0" data-promotion="0" data-instanceid="3915190" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">10:00</td>
+                        <td data-label="End">11:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915190-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915190" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671616800" data-end="1671620400" data-attendeeidx="0" data-promotion="0" data-instanceid="3915406" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">10:00</td>
+                        <td data-label="End">11:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915406-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915406" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671618600" data-end="1671621300" data-attendeeidx="0" data-promotion="0" data-instanceid="3919163" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="23">
+
+                            <td>Chafford Hundred: Group Cycling</td>
+            
+            <td data-label="Start">10:30</td>
+                        <td data-label="End">11:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919163-spaces">23</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919163" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671618600" data-end="1671621300" data-attendeeidx="0" data-promotion="0" data-instanceid="3939523" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">10:30</td>
+                        <td data-label="End">11:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939523-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939523" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671618600" data-end="1671621300" data-attendeeidx="0" data-promotion="0" data-instanceid="3938880" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">10:30</td>
+                        <td data-label="End">11:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938880-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938880" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671618600" data-end="1671622200" data-attendeeidx="0" data-promotion="0" data-instanceid="3919154" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="20">
+
+                            <td>Chafford Hundred: Zumba</td>
+            
+            <td data-label="Start">10:30</td>
+                        <td data-label="End">11:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919154-spaces">20</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919154" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671620400" data-end="1671624000" data-attendeeidx="0" data-promotion="0" data-instanceid="3915191" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">11:00</td>
+                        <td data-label="End">12:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915191-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915191" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671620400" data-end="1671624000" data-attendeeidx="0" data-promotion="0" data-instanceid="3915407" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">11:00</td>
+                        <td data-label="End">12:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915407-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915407" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671621300" data-end="1671624000" data-attendeeidx="0" data-promotion="0" data-instanceid="3939524" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">11:15</td>
+                        <td data-label="End">12:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939524-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939524" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671621300" data-end="1671624000" data-attendeeidx="0" data-promotion="0" data-instanceid="3938881" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">11:15</td>
+                        <td data-label="End">12:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938881-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938881" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671621900" data-end="1671627300" data-attendeeidx="0" data-promotion="0" data-instanceid="3919172" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="10">
+
+                            <td>Chafford Hundred: Vinyasa Flow Yoga</td>
+            
+            <td data-label="Start">11:25</td>
+                        <td data-label="End">12:55</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919172-spaces">10</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919172" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671624000" data-end="1671626700" data-attendeeidx="0" data-promotion="0" data-instanceid="3939525" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">12:00</td>
+                        <td data-label="End">12:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939525-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939525" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671624000" data-end="1671626700" data-attendeeidx="0" data-promotion="0" data-instanceid="3938882" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">12:00</td>
+                        <td data-label="End">12:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938882-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938882" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671624000" data-end="1671627600" data-attendeeidx="0" data-promotion="0" data-instanceid="3915192" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">12:00</td>
+                        <td data-label="End">13:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915192-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915192" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671624000" data-end="1671627600" data-attendeeidx="0" data-promotion="0" data-instanceid="3915408" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">12:00</td>
+                        <td data-label="End">13:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915408-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915408" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671626700" data-end="1671629400" data-attendeeidx="0" data-promotion="0" data-instanceid="3939526" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">12:45</td>
+                        <td data-label="End">13:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939526-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939526" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671626700" data-end="1671629400" data-attendeeidx="0" data-promotion="0" data-instanceid="3938883" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">12:45</td>
+                        <td data-label="End">13:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938883-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938883" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671627600" data-end="1671630300" data-attendeeidx="0" data-promotion="0" data-instanceid="3919181" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="12">
+
+                            <td>Chafford Hundred: Aqua Yoga</td>
+            
+            <td data-label="Start">13:00</td>
+                        <td data-label="End">13:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919181-spaces">12</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919181" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671627600" data-end="1671631200" data-attendeeidx="0" data-promotion="0" data-instanceid="3915193" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">13:00</td>
+                        <td data-label="End">14:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915193-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915193" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671627600" data-end="1671631200" data-attendeeidx="0" data-promotion="0" data-instanceid="3915409" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">13:00</td>
+                        <td data-label="End">14:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915409-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915409" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671629400" data-end="1671632100" data-attendeeidx="0" data-promotion="0" data-instanceid="3939527" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">13:30</td>
+                        <td data-label="End">14:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939527-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939527" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671629400" data-end="1671632100" data-attendeeidx="0" data-promotion="0" data-instanceid="3938884" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">13:30</td>
+                        <td data-label="End">14:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938884-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938884" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671631200" data-end="1671634800" data-attendeeidx="0" data-promotion="0" data-instanceid="3915194" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">14:00</td>
+                        <td data-label="End">15:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915194-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915194" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671631200" data-end="1671634800" data-attendeeidx="0" data-promotion="0" data-instanceid="3915410" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">14:00</td>
+                        <td data-label="End">15:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915410-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915410" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671632100" data-end="1671634800" data-attendeeidx="0" data-promotion="0" data-instanceid="3939528" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">14:15</td>
+                        <td data-label="End">15:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939528-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939528" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671632100" data-end="1671634800" data-attendeeidx="0" data-promotion="0" data-instanceid="3938885" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">14:15</td>
+                        <td data-label="End">15:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938885-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938885" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671634800" data-end="1671637500" data-attendeeidx="0" data-promotion="0" data-instanceid="3939529" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">15:00</td>
+                        <td data-label="End">15:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939529-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939529" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671634800" data-end="1671637500" data-attendeeidx="0" data-promotion="0" data-instanceid="3938886" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">15:00</td>
+                        <td data-label="End">15:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938886-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938886" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671634800" data-end="1671638400" data-attendeeidx="0" data-promotion="0" data-instanceid="3915195" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">15:00</td>
+                        <td data-label="End">16:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915195-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915195" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671634800" data-end="1671638400" data-attendeeidx="0" data-promotion="0" data-instanceid="3915411" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">15:00</td>
+                        <td data-label="End">16:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915411-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915411" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671637500" data-end="1671640200" data-attendeeidx="0" data-promotion="0" data-instanceid="3939530" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">15:45</td>
+                        <td data-label="End">16:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939530-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939530" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671637500" data-end="1671640200" data-attendeeidx="0" data-promotion="0" data-instanceid="3938887" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">15:45</td>
+                        <td data-label="End">16:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938887-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938887" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671640200" data-end="1671642900" data-attendeeidx="0" data-promotion="0" data-instanceid="3939531" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">16:30</td>
+                        <td data-label="End">17:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939531-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939531" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671640200" data-end="1671642900" data-attendeeidx="0" data-promotion="0" data-instanceid="3938888" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">16:30</td>
+                        <td data-label="End">17:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938888-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938888" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671642900" data-end="1671645600" data-attendeeidx="0" data-promotion="0" data-instanceid="3939532" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">17:15</td>
+                        <td data-label="End">18:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939532-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939532" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671642900" data-end="1671645600" data-attendeeidx="0" data-promotion="0" data-instanceid="3938889" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">17:15</td>
+                        <td data-label="End">18:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938889-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938889" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671645600" data-end="1671648300" data-attendeeidx="0" data-promotion="0" data-instanceid="3939533" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">18:00</td>
+                        <td data-label="End">18:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939533-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939533" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671645600" data-end="1671648300" data-attendeeidx="0" data-promotion="0" data-instanceid="3938890" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">18:00</td>
+                        <td data-label="End">18:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938890-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938890" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671646500" data-end="1671649200" data-attendeeidx="0" data-promotion="0" data-instanceid="3927011" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="25">
+
+                            <td>Chafford Hundred: Virtual RPM - 45</td>
+            
+            <td data-label="Start">18:15</td>
+                        <td data-label="End">19:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3927011-spaces">25</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3927011" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671648300" data-end="1671651000" data-attendeeidx="0" data-promotion="0" data-instanceid="3939534" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">18:45</td>
+                        <td data-label="End">19:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939534-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939534" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671648300" data-end="1671651000" data-attendeeidx="0" data-promotion="0" data-instanceid="3938891" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">18:45</td>
+                        <td data-label="End">19:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938891-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938891" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671649200" data-end="1671651900" data-attendeeidx="0" data-promotion="0" data-instanceid="3919183" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="23">
+
+                            <td>Chafford Hundred: Group Cycling</td>
+            
+            <td data-label="Start">19:00</td>
+                        <td data-label="End">19:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919183-spaces">23</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919183" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671649200" data-end="1671652800" data-attendeeidx="0" data-promotion="0" data-instanceid="3915196" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">19:00</td>
+                        <td data-label="End">20:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915196-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915196" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671651000" data-end="1671653700" data-attendeeidx="0" data-promotion="0" data-instanceid="3917604" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="21">
+
+                            <td>Chafford Hundred: Body Pump</td>
+            
+            <td data-label="Start">19:30</td>
+                        <td data-label="End">20:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3917604-spaces">21</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3917604" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671651000" data-end="1671654600" data-attendeeidx="0" data-promotion="0" data-instanceid="3919192" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="10">
+
+                            <td>Chafford Hundred: Hatha Yoga</td>
+            
+            <td data-label="Start">19:30</td>
+                        <td data-label="End">20:30</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919192-spaces">10</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919192" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671651000" data-end="1671653700" data-attendeeidx="0" data-promotion="0" data-instanceid="3939535" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">19:30</td>
+                        <td data-label="End">20:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939535-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939535" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671651000" data-end="1671653700" data-attendeeidx="0" data-promotion="0" data-instanceid="3938892" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">19:30</td>
+                        <td data-label="End">20:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938892-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938892" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671652800" data-end="1671656400" data-attendeeidx="0" data-promotion="0" data-instanceid="3915197" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">20:00</td>
+                        <td data-label="End">21:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915197-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915197" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671652800" data-end="1671656400" data-attendeeidx="0" data-promotion="0" data-instanceid="3915412" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">20:00</td>
+                        <td data-label="End">21:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915412-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915412" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671653700" data-end="1671656400" data-attendeeidx="0" data-promotion="0" data-instanceid="3939536" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">20:15</td>
+                        <td data-label="End">21:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939536-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939536" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671653700" data-end="1671656400" data-attendeeidx="0" data-promotion="0" data-instanceid="3938893" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">20:15</td>
+                        <td data-label="End">21:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938893-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938893" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671654600" data-end="1671657300" data-attendeeidx="0" data-promotion="0" data-instanceid="3919202" data-parentinstanceid="0" data-waitinglistenabled="1" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="25">
+
+                            <td>Chafford Hundred: Body Combat</td>
+            
+            <td data-label="Start">20:30</td>
+                        <td data-label="End">21:15</td>
+
+                            <td data-label="Spaces" class="spaces instance-3919202-spaces">25</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3919202" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671656400" data-end="1671659100" data-attendeeidx="0" data-promotion="0" data-instanceid="3939537" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 1</td>
+            
+            <td data-label="Start">21:00</td>
+                        <td data-label="End">21:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3939537-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3939537" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671656400" data-end="1671659100" data-attendeeidx="0" data-promotion="0" data-instanceid="3938894" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Squash Court 2</td>
+            
+            <td data-label="Start">21:00</td>
+                        <td data-label="End">21:45</td>
+
+                            <td data-label="Spaces" class="spaces instance-3938894-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3938894" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671656400" data-end="1671660000" data-attendeeidx="0" data-promotion="0" data-instanceid="3915198" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 1</td>
+            
+            <td data-label="Start">21:00</td>
+                        <td data-label="End">22:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915198-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915198" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+            
+            <tr class="disabled_session" data-start="1671656400" data-end="1671660000" data-attendeeidx="0" data-promotion="0" data-instanceid="3915413" data-parentinstanceid="0" data-waitinglistenabled="0" data-numberonwaitinglist="0" data-price="0" data-nonwaitingspaces="1">
+
+                            <td>Chafford Hundred: Member Tennis - Court 2</td>
+            
+            <td data-label="Start">21:00</td>
+                        <td data-label="End">22:00</td>
+
+                            <td data-label="Spaces" class="spaces instance-3915413-spaces">1</td>
+            
+            
+            
+                        
+                
+                <input type="hidden" class="memberselect" name="attendeeidx" value="0">
+            
+            <input name="book" type="hidden" value="1">
+
+                            <td><input id="btnSession3915413" name="book" type="submit" value="Upcoming"></td>
+            
+            
+            </tr>
+        
+        </tbody>
+    </table>
+
+</div><h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-13" aria-controls="ui-id-14" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Thu, 22nd December, 2022 <!-- (80) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221222" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-14" aria-labelledby="ui-id-13" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div><h3 class="ui-accordion-header ui-corner-top ui-accordion-header-collapsed ui-corner-all ui-state-default ui-accordion-icons" role="tab" id="ui-id-15" aria-controls="ui-id-16" aria-selected="false" aria-expanded="false" tabindex="-1"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>Fri, 23rd December, 2022 <!-- (74) --></h3><div data-loaded="0" data-group-by="date" data-group-key="20221223" class="sessions-group ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content" id="ui-id-16" aria-labelledby="ui-id-15" role="tabpanel" aria-hidden="true" style="display: none;">
+                    <p class="sessions_loading">
+                        <img src="https://bannatyne-services.brightlime.com/media/image/loading-bar.gif" alt=""><br>
+                        Loading sessions...
+                    </p>
+                </div>        </div>
+    </div>
+    
+    </div>    </div><!-- /#main-content-mp -->
+
+    <footer>
+        
+            <div class="container mobile-apps">
+                <h2>Check out our new app!</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="mobile-apps-features">
+                            <li>Quick and easy class bookings</li>
+                            <li>Keep up to date with news and info</li>
+                            <li>Offers and promotions</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="https://itunes.apple.com/gb/app/bannatyne-health-club/id1353505662?mt=8" style="display:inline-block;overflow:hidden;background:url(https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;width:135px;height:40px;background-size:contain;"></a>
+                        <a href="https://play.google.com/store/apps/details?id=com.innovatise.bannatyne" style="display:inline-block;overflow:hidden;background:url(https://bannatyne-services.brightlime.com/media/image/theme/get-on-google-play.png) no-repeat;width:135px;height:40px;background-size:contain;"></a>
+                    </div>
+                    <div class="col-md-3">
+                        <ul class="mobile-apps-features">
+                            <li>Myzone integration</li>
+                            <li>Mywellness integration</li>
+                            <li>And more to come</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="container submitfeedback">
+                <a href="https://www.bannatyne.co.uk/feedback-and-support" class="submitfeedback">Submit Feedback</a>
+            </div>
+            </footer>
+
+    <div class="forp"></div>
+    
+
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div></body>
